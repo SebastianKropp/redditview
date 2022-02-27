@@ -1,25 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
+import SearchParameters from './searchParameters';
+import './default.css'
+import 'font-awesome/css/font-awesome.min.css';
+import { text } from '@fortawesome/fontawesome-svg-core';
 
-function App() {
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ 'textAlign': 'center', 'paddingTop': '13%' }}>
+      <img className="mainLogo" src={require("./logo.PNG")} />
+      <h1>RedditView</h1>
+      <SearchParameters />
     </div>
   );
-}
+};
 
 export default App;
