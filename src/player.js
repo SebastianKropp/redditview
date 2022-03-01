@@ -60,22 +60,20 @@ const Player = () => {
   const DisplayOverlay = () => {
     return (
       <div className="overlay">
-        <ul className="controlOverlay">
-          <li className='overlaySkip'>
-            <FontAwesomeIcon icon={faBackward} onClick={() => setCount(count - 1)} />
-          </li>
-          <li>
-            <FontAwesomeIcon icon={faForward} onClick={() => setCount(count + 1)} />
-          </li>
-        </ul>
+        <div>
+          <FontAwesomeIcon icon={faBackward} onClick={() => setCount(count - 1)} />
+        </div>
+        <div>
+          <FontAwesomeIcon icon={faForward} onClick={() => setCount(count + 1)} />
+        </div>
       </div>
     )
   }
   console.log(posts);
 
   return (
-    <div display="inline" height="10vh">
-      <ul display="inline">
+    <body>
+      <ul display="inline-block">
         <li>
           <img className="playerLogo" src={require('./logo.PNG')} onClick={() => navigate("/")} />
         </li>
@@ -109,15 +107,16 @@ const Player = () => {
             url={"urls:", posts[count]}
             className='react-player'
             width="100%"
-            height="90%"
+            height="100%"
             volume="1"
             playing={true}
-            onEnded={() => setCount(count + 1)}>
+            onEnded={() => setCount(count + 1)}
+            onError={() => setCount(count + 1)}>
           </ReactPlayer>
           : <h2>Loading...</h2>}
         {isHovering && <DisplayOverlay />}
       </div>
-    </div>
+    </body>
 
   );
 };

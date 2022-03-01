@@ -1,20 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-router-dom';
-/*
-{function () {
-    for (let i = 0; i < sampleTextArray.length; i++) {
-        let j = 0;
-        var textToShow = ""
-        while (j < sampleTextArray[i].length) {
-            textToShow = textToShow.concat(sampleTextArray[j]);
-            setText(textToShow)
-            console.log(text);
-            sleep(275);
-            j++;
-        }
-    }
-}}
+
+
 
 
 //import Player from './player';
@@ -22,23 +10,50 @@ import 'react-router-dom';
 const sleep = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
-*/
+
 
 const SearchParameters = () => {
-    //const sampleTextArray = ["Enter a Subreddit", "YoutubeHaiku", "Videos", "IdiotsInCars", "What are you waiting for?"]
+    const sampleTextArray = ["Stream your favorite content.", "Just enter a subreddit.", "like YoutubeHaiku", "Videos", "DeepIntoYoutube", "What are you waiting for?", "|", ""]
     const navigate = useNavigate();
     const [subreddit, setSubreddit] = useState();
-    //const [text, setText] = useState();
+    const [index, setIndex] = useState(0);
+    const [subIndex, setSubIndex] = useState(0);
+
+    useEffect(() => {
+        switch (true) {
+            case index == 7:
+                break;
+            case index == 6:
+                sleep(850).then(() => {
+                    setSubIndex((subIndex + 1) % 2);
+                })
+                break;
+            case subIndex < sampleTextArray[index].length:
+                sleep(75).then(() => {
+                    setSubIndex(subIndex + 1);
+                })
+                break;
+            case subIndex == sampleTextArray[index].length && index < sampleTextArray[index].length - 1:
+                sleep(2200).then(() => {
+                    setSubIndex(0);
+                    setIndex(index + 1);
+                })
+        }
+    }, [subIndex, index])
+    console.log(subIndex, index);
+    console.log(sampleTextArray[index].slice(0, subIndex))
     //setText("");
+    //var text = ""
     return (
         <div text-align="center" className="search-parameters">
             <form>
                 <label htmlFor="subreddit">
                     <input
                         id="subreddit"
-                        onChange={(event) => setSubreddit(event.target.value)}
+                        onChange={(event) => { setSubreddit(event.target.value) }}
                         onKeyPress={(event) => event.key === "Enter" && navigate("/player", { state: { sub: subreddit } })}
-                        placeholder="IdiotsInCars" />
+                        placeholder={sampleTextArray[index].slice(0, subIndex)}
+                        onClick={() => setIndex(7)} />
                 </label>
             </form>
         </div>
