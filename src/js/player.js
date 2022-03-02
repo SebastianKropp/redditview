@@ -75,7 +75,7 @@ const Player = () => {
     <body>
       <ul display="inline-block">
         <li>
-          <img className="playerLogo" src={require('./logo.PNG')} onClick={() => navigate("/")} />
+          <img className="playerLogo" src={require('./../assets/logo.PNG')} onClick={() => navigate("/")} />
         </li>
         <li>
           <h2>{'RedditView '}</h2>

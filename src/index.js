@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import Player from "./player"
-import reportWebVitals from './reportWebVitals';
+import './css/index.css';
+import App from './js/App';
+import Player from "./js/player"
+import reportWebVitals from './js/reportWebVitals';
 import {
   BrowserRouter,
   Routes,
@@ -15,7 +15,7 @@ ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />} />
-        <Route path="Player" element={<Player />}/>
+      <Route path="Player" element={<Player />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")
