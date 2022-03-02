@@ -1,4 +1,4 @@
-<h1>Project is hosted at: [SebastianKropp.tech](Https://www.SebastianKropp.tech/redditview)</h1>
+<h1>Project is hosted at: [SebastianKropp.tech](https://www.sebastiankropp.tech/redditview)</h1>
 
 <h2>Running Guide:<h2>
 1. Clone Repository
