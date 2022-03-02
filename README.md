@@ -1,7 +1,6 @@
-Project is hosted at: SebastianKropp.tech/redditview
+<h1>Project is hosted at: [SebastianKropp.tech](Https://www.SebastianKropp.tech/redditview)</h1>
 
-Running Guide:
-
+<h2>Running Guide:<h2>
 1. Clone Repository
 2. npm install (all dependencies)
 3. npm start
