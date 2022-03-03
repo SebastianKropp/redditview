@@ -45,9 +45,8 @@ const Player = () => {
       var fetchUrl;
       switch (true) {
         case selector.type == "top":
-          console.log("this is the time selected: ", selector.time)
           fetchUrl = fetch("https://www.reddit.com/r/" + state.sub + "/" + selector.type + "/.json?t=" + selector.time + "&count=25&after=" + kind);
-          console.log("https://www.reddit.com/r/" + state.sub + "/" + selector.type + "/.json?t=" + selector.time + "&count=25&after=" + kind)
+          //console.log("https://www.reddit.com/r/" + state.sub + "/" + selector.type + "/.json?t=" + selector.time + "&count=25&after=" + kind)
           break;
         default:
           fetchUrl = fetch("https://www.reddit.com/r/" + state.sub + "/" + selector.type + ".json?count=25&after=" + kind);
@@ -55,7 +54,7 @@ const Player = () => {
 
       fetchUrl.then(res => {
         if (res.status !== 200) {
-          //console.log('error')
+          //Error check
         }
         return res.json()
       })
@@ -69,16 +68,15 @@ const Player = () => {
     }
     fetchData();
   }, [selector, kind]);
-  //const fetchURLArray = fetchData();
 
   const DisplayOverlay = () => {
     return (
       <div className="overlay">
-        <div>
+        <div >
           <FontAwesomeIcon icon={faBackward} onClick={() => setCount(count - 1)} />
         </div>
-        <div>
-          <FontAwesomeIcon icon={faForward} onClick={() => setCount(count + 1)} />
+        <div >
+          <FontAwesomeIcon size="70" icon={faForward} onClick={() => setCount(count + 1)} />
         </div>
       </div>
     )
@@ -87,7 +85,6 @@ const Player = () => {
     if (top.current == null) {
       return null;
     }
-    console.log(top.current.className == "liSelectorActive");
     if (top.current.className == "liSelectorActive") {
       return (
         <select className="dropDown"
@@ -106,14 +103,14 @@ const Player = () => {
       return null;
     }
   }
+
   if (count == 24) {
     setKind(posts[count - 1].name);
     setCount(0);
   }
-  console.log(count);
-  console.log(posts);
+
   return (
-    <body>
+    <div>
       <ul display="inline-block">
         <li>
           <img className="playerLogo" src={require('./../assets/logo.PNG')} onClick={() => navigate("/")} />
@@ -122,21 +119,21 @@ const Player = () => {
           <h2>{'RedditView '}</h2>
         </li>
         <li className="liSelectorInactive">
-          <text font-size="2em">{'=> ' + state.sub}</text>
+          <p fontSize="2em">{'=> ' + state.sub}</p>
         </li>
       </ul>
       <ul className="ulSelector">
         <li className={isactive[0] ? "liSelectorActive" : "liSelectorInactive"} onClick={() => { setIsActive([1, 0, 0]); setCount(0); setSelector({ type: 'hot' }) }}>
           <FontAwesomeIcon id="Hot" icon={faFire} />
-          <label for="Hot"> Hot</label>
+          <label htmlFor="Hot"> Hot</label>
         </li>
         <li className={isactive[1] ? "liSelectorActive" : "liSelectorInactive"} onClick={() => { setIsActive([0, 1, 0]); setCount(0); setSelector({ type: 'new' }); }}>
           <FontAwesomeIcon id="New" icon={faCertificate} />
-          <label for="New"> New</label>
+          <label htmlFor="New"> New</label>
         </li>
         <li ref={top} className={isactive[2] ? "liSelectorActive" : "liSelectorInactive"} onClick={() => { setIsActive([0, 0, 1]); setCount(0); setSelector({ type: 'top', time: "day" }); }}>
           <FontAwesomeIcon id="Top" icon={faSignal} />
-          <label for="Top"> Top</label>
+          <label htmlFor="Top"> Top</label>
           <DropDown padding-left="5em" />
         </li>
         <li className="liSelectorActive" onClick={() => window.open("https://www.reddit.com" + posts[count].permalink)}>
@@ -153,15 +150,16 @@ const Player = () => {
             className='react-player'
             width="100%"
             height="100%"
-            volume="1"
+            volume={1}
             playing={true}
             onEnded={() => setCount(count + 1)}
             onError={() => setCount(count + 1)}>
           </ReactPlayer>
-          : <h2>Loading...</h2>}
-        {isHovering && <DisplayOverlay />}
+          : <div className="loader"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>}
+        <DisplayOverlay />
+        {/* for overlaying on player not disabled {isHovering && <DisplayOverlay />} */}
       </div>
-    </body>
+    </div>
 
   );
 };

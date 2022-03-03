@@ -40,10 +40,7 @@ const SearchParameters = () => {
                 })
         }
     }, [subIndex, index])
-    console.log(subIndex, index);
-    console.log(sampleTextArray[index].slice(0, subIndex))
-    //setText("");
-    //var text = ""
+    //console.log(subIndex, index);
     return (
         <div text-align="center" className="search-parameters">
             <form>
