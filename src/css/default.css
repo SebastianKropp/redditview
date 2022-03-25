@@ -18,19 +18,46 @@ ul, li {
     padding-right: 1em;
 }
 
-input {
+label {
+  display:inline;
+  font-size: 1.05em;
+}
+
+/* Search Parameters */
+
+.mainLogo {
+  width: 10em
+}
+
+.selfTypingSearch {
+  color: transparent;
+  text-shadow: 0 0 0 #ffffff;
+}
+
+.userInput {
     background-color: #2c343a;
     border-radius: 25px;
     border: 0;
     box-sizing: border-box;
-    color: #eee;
+
+    color: transparent;
+    -webkit-text-fill-color: #6B6D6E;
+
     font-size: 18px;
     height: 35px;
     outline: 0;
     padding: 4px 20px 0;
     width: 35%;
     text-align: center;
-  }
+}
+
+/* PlayerPage */
+
+.playerLogo {
+  width: 3.5em;
+  height: auto;
+  vertical-align: middle;
+}
 
 .dropDown {
     display: inline-block;
@@ -46,10 +73,8 @@ input {
     width: 60%;
     text-align: center;
 }
-label {
-    display:inline;
-    font-size: 1.05em;
-}
+
+/* Active Buttons */
 
 .ulSelector {
     display: inline-block;
@@ -62,6 +87,10 @@ label {
     display: inline-block;
     vertical-align: middle;
     padding-left: 2em;
+    padding-right: 0em;
+}
+.liSelectorInactive:hover {
+  color: #757677;
 }
 
 .liSelectorActive {
@@ -71,9 +100,8 @@ label {
     padding-left: 2em;
     padding-right: 0em;
 }
-.liSelectorInactive:hover {
-    color: #757677;
-}
+
+/* End of Active Buttons */
 
 .overlay {
     display:flex;
@@ -81,7 +109,7 @@ label {
     position: relative;
     width: auto;
     height: 11%;
-    /*background-color: rgba(0, 0, 0, 0.5);*/
+    background-color: rgba(0, 0, 0, 0.25);
     color: white;
     font-size: 32px;
     align-items: center;
@@ -97,27 +125,32 @@ label {
     align-items: center;
 }
 
-.playerLogo {
-    width: 3.5em;
-    height: auto;
-    vertical-align: middle;
-}
-.mainLogo {
-    width: 10em
-}
 .player-wrapper {
     height: 80%;
     width: 100%;
     z-index: 1;
     position: absolute;
 }
-  
+
+/* displayPlayer && controls */
+
 .react-player {
     width: 100%;
 
 }
+.videoBar {
+  align-content: center;
+  
+  width: 90%;
+  height: 8.4px;
+  cursor: pointer;
+  /* Edits user-agent input color without having to implement custom input range for each browser */
+  filter: hue-rotate(150deg);
+}
 
-/* loading.io spinner for loading animation */
+
+
+/* loading.io spinner for loading animation in player.js */
 
 .lds-roller {
     display: inline-block;

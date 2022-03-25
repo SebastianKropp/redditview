@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ReactPlayer from 'react-player/lazy'
-import React, { useEffect, useState, useRef } from 'react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faForward, faBackward, faFire, faCertificate, faSignal } from '@fortawesome/free-solid-svg-icons';
+import { faFire, faCertificate, faSignal } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
+import DisplayOverlay from './displayPlayer'
+import DisplayDropDown from './displayDropDown'
 
 
 function isValidVideo(child) {
@@ -26,40 +28,38 @@ function retrieveURL(child) {
 }
 
 
+const PlayerPage = () => {
 
-const Player = () => {
-  const [isactive, setIsActive] = useState([1, 0, 0])
   const navigate = useNavigate();
   const { state } = useLocation();
+
+  // Hooks for managing buttons (i.e by time, hot/new/top && today/week/month)
+  const [isactive, setIsActive] = useState([1, 0, 0])
+  const [selector, setSelector] = useState({ type: "hot" })
+  // Hooks for managing post data
   const [count, setCount] = useState(0);
   const [posts, setPosts] = useState();
-  const [selector, setSelector] = useState({ type: "hot" })
-  const [isHovering, setIsHovering] = useState()
-  const [kind, setKind] = useState("");
-  const [dropDownValue, setDropDownValue] = useState("Todays")
-  const top = useRef(null);
+  const [kind, setKind] = useState(""); //t3_kind identifier for posts used by Reddit API 
 
-  //const count = 0;
   useEffect(() => {
     const fetchData = () => {
       var fetchUrl;
       switch (true) {
-        case selector.type == "top":
+        case selector.type === "top":
           fetchUrl = fetch("https://www.reddit.com/r/" + state.sub + "/" + selector.type + "/.json?t=" + selector.time + "&count=25&after=" + kind);
-          //console.log("https://www.reddit.com/r/" + state.sub + "/" + selector.type + "/.json?t=" + selector.time + "&count=25&after=" + kind)
           break;
         default:
           fetchUrl = fetch("https://www.reddit.com/r/" + state.sub + "/" + selector.type + ".json?count=25&after=" + kind);
+          break;
       }
 
       fetchUrl.then(res => {
         if (res.status !== 200) {
-          //Error check
+          //Implement an Error Check Message for Users
         }
         return res.json()
       })
         .then(data => {
-          console.log("json:", data.data.children);
           var urlArray = data.data.children
             .filter(child => isValidVideo(child))
             .map(child => retrieveURL(child))
@@ -67,44 +67,10 @@ const Player = () => {
         })
     }
     fetchData();
-  }, [selector, kind]);
+  }, [selector, kind, state.sub]);
 
-  const DisplayOverlay = () => {
-    return (
-      <div className="overlay">
-        <div >
-          <FontAwesomeIcon icon={faBackward} onClick={() => setCount(count - 1)} />
-        </div>
-        <div >
-          <FontAwesomeIcon size="70" icon={faForward} onClick={() => setCount(count + 1)} />
-        </div>
-      </div>
-    )
-  }
-  const DropDown = () => {
-    if (top.current == null) {
-      return null;
-    }
-    if (top.current.className == "liSelectorActive") {
-      return (
-        <select className="dropDown"
-          name="Time"
-          value={dropDownValue}
-          onClick={(event) => event.stopPropagation()}
-          onChange={(event) => { setDropDownValue(event.target.value); setSelector({ type: "top", time: event.target.value }) }}>
-          <option value="today">Today</option>
-          <option value="week">This Week</option>
-          <option value="year">This Year</option>
-          <option value="all">All Time</option>
-        </select>
-      )
-    }
-    else {
-      return null;
-    }
-  }
-
-  if (count == 24) {
+  //Triggers fetchData() call to refresh urlArray at end of bounds
+  if (count === 24) {
     setKind(posts[count - 1].name);
     setCount(0);
   }
@@ -113,7 +79,7 @@ const Player = () => {
     <div>
       <ul display="inline-block">
         <li>
-          <img className="playerLogo" src={require('./../assets/logo.PNG')} onClick={() => navigate("/")} />
+          <img className="playerLogo" alt="" src={require('./../assets/logo.PNG')} onClick={() => navigate("/")} />
         </li>
         <li>
           <h2>{'RedditView '}</h2>
@@ -122,7 +88,9 @@ const Player = () => {
           <p fontSize="2em">{'=> ' + state.sub}</p>
         </li>
       </ul>
+      {/* Button Overlay */}
       <ul className="ulSelector">
+        {/* This is particularly disgusting (reminder fix redundancy && improve readability) */}
         <li className={isactive[0] ? "liSelectorActive" : "liSelectorInactive"} onClick={() => { setIsActive([1, 0, 0]); setCount(0); setSelector({ type: 'hot' }) }}>
           <FontAwesomeIcon id="Hot" icon={faFire} />
           <label htmlFor="Hot"> Hot</label>
@@ -131,33 +99,21 @@ const Player = () => {
           <FontAwesomeIcon id="New" icon={faCertificate} />
           <label htmlFor="New"> New</label>
         </li>
-        <li ref={top} className={isactive[2] ? "liSelectorActive" : "liSelectorInactive"} onClick={() => { setIsActive([0, 0, 1]); setCount(0); setSelector({ type: 'top', time: "day" }); }}>
+        <li className={isactive[2] ? "liSelectorActive" : "liSelectorInactive"} onClick={() => { setIsActive([0, 0, 1]); setCount(0); setSelector({ type: 'top', time: "day" }); }}>
           <FontAwesomeIcon id="Top" icon={faSignal} />
           <label htmlFor="Top"> Top</label>
-          <DropDown padding-left="5em" />
+          <DisplayDropDown active={isactive[2]} setSelector={setSelector} padding-left="5em" />
         </li>
         <li className="liSelectorActive" onClick={() => window.open("https://www.reddit.com" + posts[count].permalink)}>
           <FontAwesomeIcon id="Comments" icon={faComment} />
         </li>
       </ul>
-      <div
-        className="player-wrapper"
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}>
+      {/* Main Player && Controls */}
+      <div className="player-wrapper">
         {posts ?
-          <ReactPlayer
-            url={posts[count].url}
-            className='react-player'
-            width="100%"
-            height="100%"
-            volume={1}
-            playing={true}
-            onEnded={() => setCount(count + 1)}
-            onError={() => setCount(count + 1)}>
-          </ReactPlayer>
-          : <div className="loader"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>}
-        <DisplayOverlay />
-        {/* for overlaying on player not disabled {isHovering && <DisplayOverlay />} */}
+          <DisplayOverlay url={posts[count].url} count={count} setCount={setCount} />
+          : <div className="loader"><div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+        }
       </div>
     </div>
 
@@ -166,4 +122,4 @@ const Player = () => {
 
 
 
-export default Player;
+export default PlayerPage;
