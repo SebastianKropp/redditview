@@ -1,15 +1,16 @@
 import 'react-router-dom';
 import { useState, useRef } from 'react';
-import ReactPlayer from 'react-player/lazy'
-
+import { Slider } from '@mui/material';
 import { faForward, faBackward } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ReactPlayer from 'react-player/lazy';
 
 /* Video Player and Controls
    Minor Issue: Update the final videobar value before the onEnded call triggers a rerender for the next video */
 const DisplayPlayer = (props) => {
 
     const urlToView = props.url;
+    console.log(urlToView + '/audio')
     let count = props.count;
     let setCount = props.setCount;
 
@@ -34,21 +35,32 @@ const DisplayPlayer = (props) => {
             </ReactPlayer>
 
             <div className="overlay">
-                <div >
-                    <FontAwesomeIcon icon={faBackward} onClick={() => count > 0 ? setCount(count - 1) : setCount(count)} />
+                <div>
+                    <FontAwesomeIcon
+                        icon={faBackward}
+                        onClick={() => count > 0 ? setCount(count - 1) : setCount(count)} />
                 </div>
 
-                <input className="videoBar"
-                    type="range"
+                <Slider
+                    //className="videoBar"
+                    style={{
+                        color: '#fe4500'
+                    }}
+                    width='5em'
+                    size="large"
                     min={0}
                     max={videoState.totalTime}
+                    valueLabelFormat={(seconds) => `${Math.trunc(videoState.currentTime / 60)}:${('0' + Math.trunc(videoState.currentTime % 60)).slice(-2)}`}
                     value={videoState.currentTime}
-                    onInput={(event) => {
+                    aria-label="large"
+                    valueLabelDisplay="auto"
+                    onChange={(event) => {
                         videoBarReference.current.seekTo(event.target.value);
                         setVideoState({ currentTime: event.target.value, totalTime: videoState.totalTime })
-                    }} />
+                    }}
 
-                <div >
+                />
+                <div>
                     <FontAwesomeIcon icon={faForward} onClick={() => setCount(count + 1)} />
                 </div>
             </div>

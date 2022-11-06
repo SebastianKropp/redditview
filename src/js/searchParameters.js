@@ -48,7 +48,7 @@ const SearchParameters = () => {
     //To Implement: useEffect cleanup function to prevent state updates after unmounting
 
     return (
-        <div text-align="center">
+        <div style={{ width: '100vw' }}>
             <label>
                 <input className='userInput'
                     id="subreddit"
