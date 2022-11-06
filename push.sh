@@ -1,0 +1,1 @@
+docker push sebastiankropp/redditView:${uname -m}
