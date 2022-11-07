@@ -1,1 +1,2 @@
-docker push sebastiankropp/redditView:${uname -m}
+#!/bin/bash
+docker push sebastiankropp/redditview:$(uname -m)
